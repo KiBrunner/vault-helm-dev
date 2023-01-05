@@ -35,53 +35,35 @@ Expand the name of the chart.
 Compute if the csi driver is enabled.
 */}}
 {{- define "vault.csiEnabled" -}}
-{{- $_ := set . "csiEnabled" (or
-  (eq (.Values.csi.enabled | toString) "true")
-  (and (eq (.Values.csi.enabled | toString) "-") (eq (.Values.global.enabled | toString) "true"))) -}}
+{{- $_ := set . "csiEnabled" (or (eq (.Values.csi.enabled | toString) "true") (and (eq (.Values.csi.enabled | toString) "-") (eq (.Values.global.enabled | toString) "true"))) -}}
 {{- end -}}
 
 {{/*
 Compute if the injector is enabled.
 */}}
 {{- define "vault.injectorEnabled" -}}
-{{- $_ := set . "injectorEnabled" (or
-  (eq (.Values.injector.enabled | toString) "true")
-  (and (eq (.Values.injector.enabled | toString) "-") (eq (.Values.global.enabled | toString) "true"))) -}}
+{{- $_ := set . "injectorEnabled" (or (eq (.Values.injector.enabled | toString) "true") (and (eq (.Values.injector.enabled | toString) "-") (eq (.Values.global.enabled | toString) "true"))) -}}
 {{- end -}}
 
 {{/*
 Compute if the server is enabled.
 */}}
 {{- define "vault.serverEnabled" -}}
-{{- $_ := set . "serverEnabled" (or
-  (eq (.Values.server.enabled | toString) "true")
-  (and (eq (.Values.server.enabled | toString) "-") (eq (.Values.global.enabled | toString) "true"))) -}}
+{{- $_ := set . "serverEnabled" (or (eq (.Values.server.enabled | toString) "true") (and (eq (.Values.server.enabled | toString) "-") (eq (.Values.global.enabled | toString) "true"))) -}}
 {{- end -}}
 
 {{/*
 Compute if the server auth delegator serviceaccount is enabled.
 */}}
 {{- define "vault.serverServiceAccountEnabled" -}}
-{{- $_ := set . "serverServiceAccountEnabled"
-  (and
-    (eq (.Values.server.serviceAccount.create | toString) "true" )
-    (or
-      (eq (.Values.server.enabled | toString) "true")
-      (eq (.Values.global.enabled | toString) "true"))) -}}
+{{- $_ := set . "serverServiceAccountEnabled" (and (eq (.Values.server.serviceAccount.create | toString) "true" ) (or (eq (.Values.server.enabled | toString) "true") (eq (.Values.global.enabled | toString) "true"))) -}}
 {{- end -}}
 
 {{/*
 Compute if the server auth delegator serviceaccount is enabled.
 */}}
 {{- define "vault.serverAuthDelegator" -}}
-{{- $_ := set . "serverAuthDelegator"
-  (and
-    (eq (.Values.server.authDelegator.enabled | toString) "true" )
-    (or (eq (.Values.server.serviceAccount.create | toString) "true")
-        (not (eq .Values.server.serviceAccount.name "")))
-    (or
-      (eq (.Values.server.enabled | toString) "true")
-      (eq (.Values.global.enabled | toString) "true"))) -}}
+{{- $_ := set . "serverAuthDelegator" (and (eq (.Values.server.authDelegator.enabled | toString) "true" ) (or (eq (.Values.server.serviceAccount.create | toString) "true") (not (eq .Values.server.serviceAccount.name ""))) (or (eq (.Values.server.enabled | toString) "true") (eq (.Values.global.enabled | toString) "true"))) -}}
 {{- end -}}
 
 {{/*
@@ -96,9 +78,7 @@ Compute if the server service is enabled.
 Compute if the ui is enabled.
 */}}
 {{- define "vault.uiEnabled" -}}
-{{- $_ := set . "uiEnabled" (or
-  (eq (.Values.ui.enabled | toString) "true")
-  (and (eq (.Values.ui.enabled | toString) "-") (eq (.Values.global.enabled | toString) "true"))) -}}
+{{- $_ := set . "uiEnabled" (or (eq (.Values.ui.enabled | toString) "true") (and (eq (.Values.ui.enabled | toString) "-") (eq (.Values.global.enabled | toString) "true"))) -}}
 {{- end -}}
 
 {{/*
@@ -149,7 +129,6 @@ Set's the replica count based on the different modes configured by user
     {{- default 1 -}}
   {{ end }}
 {{- end -}}
-
 {{/*
 Set's up configmap mounts if this isn't a dev deployment and the user
 defined a custom configuration.  Additionally iterates over any
@@ -181,7 +160,6 @@ extra volumes the user may have specified (such as a secret with TLS).
             defaultMode: 0440
   {{- end }}
 {{- end -}}
-
 {{/*
 Set's the args for custom command to render the Vault configuration
 file with IP addresses to make the out of box experience easier
@@ -215,7 +193,6 @@ Set's additional environment variables based on the mode.
               value: "[::]:8200"
   {{ end }}
 {{- end -}}
-
 {{/*
 Set's which additional volumes should be mounted to the container
 based on the mode configured.
@@ -303,7 +280,6 @@ Set's the affinity for pod placement when running in standalone and HA modes.
         {{- end }}
   {{ end }}
 {{- end -}}
-
 {{/*
 Sets the injector affinity for pod placement
 */}}
@@ -318,7 +294,6 @@ Sets the injector affinity for pod placement
         {{- end }}
   {{ end }}
 {{- end -}}
-
 {{/*
 Sets the topologySpreadConstraints when running in standalone and HA modes.
 */}}
@@ -333,8 +308,6 @@ Sets the topologySpreadConstraints when running in standalone and HA modes.
         {{- end }}
   {{ end }}
 {{- end -}}
-
-
 {{/*
 Sets the injector topologySpreadConstraints for pod placement
 */}}
@@ -349,7 +322,6 @@ Sets the injector topologySpreadConstraints for pod placement
         {{- end }}
   {{ end }}
 {{- end -}}
-
 {{/*
 Sets the toleration for pod placement when running in standalone and HA modes.
 */}}
@@ -364,7 +336,6 @@ Sets the toleration for pod placement when running in standalone and HA modes.
       {{- end }}
   {{- end }}
 {{- end -}}
-
 {{/*
 Sets the injector toleration for pod placement
 */}}
@@ -379,7 +350,6 @@ Sets the injector toleration for pod placement
       {{- end }}
   {{- end }}
 {{- end -}}
-
 {{/*
 Set's the node selector for pod placement when running in standalone and HA modes.
 */}}
@@ -597,7 +567,6 @@ Set's the injector webhook objectSelector
     {{ end }}
   {{ end }}
 {{ end }}
-
 {{/*
 Sets extra ui service annotations
 */}}
@@ -612,7 +581,6 @@ Sets extra ui service annotations
     {{- end }}
   {{- end }}
 {{- end -}}
-
 {{/*
 Create the name of the service account to use
 */}}
@@ -623,7 +591,6 @@ Create the name of the service account to use
     {{ default "default" .Values.server.serviceAccount.name }}
 {{- end -}}
 {{- end -}}
-
 {{/*
 Sets extra service account annotations
 */}}
@@ -638,7 +605,6 @@ Sets extra service account annotations
     {{- end }}
   {{- end }}
 {{- end -}}
-
 {{/*
 Sets extra ingress annotations
 */}}
@@ -653,7 +619,6 @@ Sets extra ingress annotations
     {{- end }}
   {{- end }}
 {{- end -}}
-
 {{/*
 Sets extra route annotations
 */}}
@@ -668,7 +633,6 @@ Sets extra route annotations
     {{- end }}
   {{- end }}
 {{- end -}}
-
 {{/*
 Sets extra vault server Service annotations
 */}}
@@ -682,7 +646,6 @@ Sets extra vault server Service annotations
     {{- end }}
   {{- end }}
 {{- end -}}
-
 {{/*
 Sets PodSecurityPolicy annotations
 */}}
@@ -697,7 +660,6 @@ Sets PodSecurityPolicy annotations
     {{- end }}
   {{- end }}
 {{- end -}}
-
 {{/*
 Sets extra statefulset annotations
 */}}
@@ -712,7 +674,6 @@ Sets extra statefulset annotations
     {{- end }}
   {{- end }}
 {{- end -}}
-
 {{/*
 Sets VolumeClaim annotations for data volume
 */}}
@@ -727,7 +688,6 @@ Sets VolumeClaim annotations for data volume
     {{- end }}
   {{- end }}
 {{- end -}}
-
 {{/*
 Sets VolumeClaim annotations for audit volume
 */}}
@@ -742,7 +702,6 @@ Sets VolumeClaim annotations for audit volume
     {{- end }}
   {{- end }}
 {{- end -}}
-
 {{/*
 Set's the container resources if the user has set any.
 */}}
@@ -933,7 +892,6 @@ Supported inputs are Values.server.service and Values.ui
 {{- else }}
 {{- end }}
 {{- end -}}
-
 {{/*
 loadBalancer configuration for the the UI service.
 Supported inputs are Values.ui
